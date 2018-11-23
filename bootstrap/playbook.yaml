@@ -1,0 +1,19 @@
+- hosts: all
+  sudo: yes
+  tasks:
+    - name: yum update
+      yum:
+        name: "*"
+        state: latest
+    - name: install python-netaddr
+      yum:
+        name: python-netaddr
+        state: latest
+    - name: install git
+      yum:
+        name: git
+        state: latest
+    - name: install vim
+      yum:
+        name: vim
+        state: latest
