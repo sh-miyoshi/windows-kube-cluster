@@ -1,0 +1,20 @@
+- name: permit root login
+  replace: dest=/etc/ssh/sshd_config regexp='^#PermitRootLogin yes' replace='PermitRootLogin yes'
+  when: ssh_root_password is defined
+
+- name: allow password authentication
+  replace: dest=/etc/ssh/sshd_config regexp='^PasswordAuthentication no' replace='PasswordAuthentication yes'
+  when: ssh_root_password is defined
+
+- name: restart sshd
+  systemd:
+    name: sshd
+    state: restarted
+  become: yes
+  when: ssh_root_password is defined
+
+- name: add root password
+  user:
+    name: "root"
+    password: "{{ ssh_root_password|password_hash('sha512') }}"
+  when: ssh_root_password is defined
